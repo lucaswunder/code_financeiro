@@ -2,6 +2,7 @@
 
 namespace CodeFin\Repositories;
 
+use CodeFin\Repositories\Interfaces\BankAccountRepository;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use CodeFin\Models\BankAccount;
