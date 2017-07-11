@@ -26,10 +26,9 @@ class BankAccountsController extends Controller
      */
     protected $validator;
 
-    public function __construct(BankAccountRepository $repository, BankAccountValidator $validator)
+    public function __construct(BankAccountRepository $repository)
     {
         $this->repository = $repository;
-        $this->validator  = $validator;
     }
 
 

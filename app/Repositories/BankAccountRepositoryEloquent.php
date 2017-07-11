@@ -4,9 +4,7 @@ namespace CodeFin\Repositories;
 
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
-use CodeFin\Repositories\Interfaces\BankAccountRepository;
 use CodeFin\Models\BankAccount;
-use CodeFin\Validators\BankAccountValidator;
 
 /**
  * Class BankAccountRepositoryEloquent
