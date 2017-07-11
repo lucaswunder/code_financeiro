@@ -35,5 +35,4 @@ $factory->define(\CodeFin\Models\BankAccount::class, function (Faker\Generator $
         'agency' => rand(10000,60000). '-'. rand(0,9),
         'account' => rand(70000,260000).'-'.rand(0,9),
     ];
-    ];
 });
