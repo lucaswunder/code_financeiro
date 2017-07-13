@@ -67,7 +67,7 @@
     <footer class="page-footer">
         <div class="footer-copyright">
             <div class="container">
-                © {{date('Y')}} <a class="grey-text text-lighten-4" href="http://code.education">Code Education</a>
+                © {{date('Y')}} <a class="grey-text text-lighten-4" href="http://">Lucas</a>
             </div>
         </div>
     </footer>

@@ -15,7 +15,7 @@
             <div class="nav-wrapper">
                 <div class="row">
                     <div class="col s12">
-                        <a href="#" class="brand-logo">Code Financeiro</a>
+                        <a href="#" class="brand-logo">Financeiro</a>
                         <a href="#" data-activates="nav-mobile" class="button-collapse">
                             <i class="material-icons">menu</i>
                         </a>
@@ -50,27 +50,20 @@
         data(){
             return {
                 menus: [
-                    {name: 'Contas a pagar', dropdownId: 'teste'},
-                    {name: 'Contas a receber', routeName: 'auth.login'},
+                    {name: 'Conta bancária', routeName: 'bank-account.list'},
                 ],
-                menusDropdown: [
-                    {
-                        id: 'teste',
-                        items: [
-                            {name: 'Listar contas', routeName: 'auth.login'},
-                            {name: 'Criar contas', routeName: 'auth.login'},
-                        ]
-                    }
-                ],
+                menusDropdown: [],
                 user: Auth.user
             }
         },
         computed: {
-           name(){
-               return this.user.data ? this.user.data.name : '';
-           }
+            name()
+            {
+                return this.user.data ? this.user.data.name : '';
+            }
         },
-        ready(){
+        ready()
+        {
             $('.button-collapse').sideNav();
             $('.dropdown-button').dropdown();
         }
