@@ -44,7 +44,7 @@ class BankAccountsController extends Controller
     public function store(BankAccountCreateRequest $request)
     {
         $bankAccount = $this->repository->create($request->all());
-        return response()->json($bankAccount->toArray(),201);
+        return response()->json($bankAccount->toArray(), 201);
     }
 
 
@@ -87,6 +87,6 @@ class BankAccountsController extends Controller
     public function destroy($id)
     {
         $this->repository->delete($id);
-        return response()->json([],204);
+        return response()->json([], 204);
     }
 }
