@@ -30,6 +30,10 @@
                     </tr>
                     </tbody>
                 </table>
+                <pagination :current-page.sync="pagination.current_page"
+                            :per-page="pagination.per_page"
+                            :total-records="pagination.total">
+                </pagination>
             </div>
 
             <div class="fixed-action-btn">
@@ -59,35 +63,56 @@
 <script>
     import {BankAccount} from '../../services/resources';
     import ModalComponent from '../../../../_default/components/Modal.vue';
+    import PaginationComponent from '../Pagination.vue';
+
     export default{
         components: {
             'modal': ModalComponent,
+            'pagination': PaginationComponent
         },
         data(){
-            return{
+            return {
                 bankAccounts: [],
                 bankAccountToDelete: null,
                 modal: {
                     id: "modal-delete"
+                },
+                pagination: {
+                    current_page: 0,
+                    per_page: 0,
+                    total: 0
                 }
             }
         },
         created(){
-            BankAccount.query().then((response) => {
-                this.bankAccounts = response.data.data;
-            });
+            this.getBankAccounts();
         },
         methods: {
             destroy(){
                 BankAccount.delete({id: this.bankAccountToDelete.id}).then((response) => {
                     this.bankAccounts.$remove(this.bankAccountToDelete);
                     this.bankAccountToDelete = null;
-                    Materialize.toast('Conta bancária excluída com sucesso',4000);
+                    Materialize.toast('Conta bancária excluída com sucesso', 4000);
                 });
             },
             openModalDelete(bankAccount){
                 this.bankAccountToDelete = bankAccount;
                 $('#modal-delete').modal('open');
+            },
+            getBankAccounts(){
+                BankAccount.query({
+                    page: this.pagination.current_page + 1
+                }).then((response) => {
+                    this.bankAccounts = response.data.data;
+                    let pagination = response.data.meta.pagination;
+                    pagination.current_page--;
+                    this.pagination = pagination;
+                });
+            }
+        },
+        events: {
+            'pagination::changed'(page){
+                this.getBankAccounts();
             }
         }
     }

@@ -2,6 +2,8 @@
 
 namespace CodeFin\Http\Controllers\Api;
 
+use CodeFin\Criteria\FindByLikeAgencyCriteria;
+use CodeFin\Criteria\FindByNameCriteria;
 use CodeFin\Http\Controllers\Controller;
 use CodeFin\Http\Controllers\Response;
 use CodeFin\Http\Requests\BankAccountCreateRequest;
@@ -31,7 +33,12 @@ class BankAccountsController extends Controller
      */
     public function index()
     {
-        return $bankAccounts = $this->repository->all();
+//        $this->repository->pushCriteria(new FindByNameCriteria('Elisabethland'))
+//            ->pushCriteria(new FindByLikeAgencyCriteria('1'));
+
+        $bankAccounts = $this->repository->paginate();
+
+        return $bankAccounts;
     }
 
     /**
