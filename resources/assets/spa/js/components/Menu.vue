@@ -24,7 +24,7 @@
                                 <a v-if="o.dropdownId" class="dropdown-button" href="!#" :data-activates="o.dropdownId">
                                     {{o.name}} <i class="material-icons right">arrow_drop_down</i>
                                 </a>
-                                <a v-else v-link="{name: o.url}">{{o.name}}</a>
+                                <a v-else v-link="{name: o.routeName}">{{o.name}}</a>
                             </li>
                             <li>
                                 <a class="dropdown-button" href="!#" data-activates="dropdown-logout">

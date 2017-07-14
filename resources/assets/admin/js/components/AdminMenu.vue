@@ -80,7 +80,7 @@
                 if(menu.dropdownId !== undefined){
                     let dropdown = this.config.menusDropdown.find((element)=>{
                         return element.id == menu.dropdownId;
-                    })
+                    });
                     if(dropdown){
                         for(let o of dropdown.items){
                             if(o.active){
