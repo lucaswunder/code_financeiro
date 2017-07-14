@@ -1,9 +1,9 @@
 <template>
     <div id="app">
+        <loading></loading>
         <header v-if="showMenu">
             <menu></menu>
         </header>
-
         <main>
             <router-view></router-view>
         </main>
@@ -20,11 +20,13 @@
     </div>
 </template>
 <script>
+    import LoadingComponent from '../../../_default/components/Loading.vue';
     import MenuComponent from './Menu.vue';
     import Auth from '../services/auth';
     export default{
         components: {
-            'menu': MenuComponent
+            'menu': MenuComponent,
+            'loading': LoadingComponent
         },
         data(){
             return{

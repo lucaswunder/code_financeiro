@@ -23,3 +23,18 @@ main{
 #sidenav-overlay {
   z-index: 996 !important;
 }
+
+body{
+  background-color: color('green','lighten-5');
+}
+
+.spinner{
+  @extend .progress;
+  margin:0;
+}
+
+.spinner-fixed{
+  width: 100%;
+  position: fixed;
+  z-index: 998;
+}
