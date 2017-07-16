@@ -7,6 +7,11 @@
                 </span>
             </div>
             <div class="card-panel z-depth-5">
+                <form>
+                    <button class="btn waves-effect">
+
+                    </button>
+                </form>
                 <table class="bordered striped hightlight responsive-table">
                     <thead>
                     <tr>
@@ -23,7 +28,7 @@
                     </thead>
                     <tbody>
                     <tr v-for="(index,o) in bankAccounts">
-                        <td>{{index + 1}}</td>
+                        <td>{{o.id}}</td>
                         <td>{{o.name}}</td>
                         <td>{{o.agency}}</td>
                         <td>{{o.account}}</td>
@@ -129,7 +134,9 @@
             },
             getBankAccounts(){
                 BankAccount.query({
-                    page: this.pagination.current_page + 1
+                    page: this.pagination.current_page + 1,
+                    orderBy: this.order.key,
+                    sortedBy: this.order.sort
                 }).then((response) => {
                     this.bankAccounts = response.data.data;
                     let pagination = response.data.meta.pagination;
@@ -140,6 +147,7 @@
             sortBy(key){
                 this.order.key = key;
                 this.order.sort = this.order.sort == 'desc' ? 'asc' : 'desc';
+                this.getBankAccounts();
             }
         },
         events: {
