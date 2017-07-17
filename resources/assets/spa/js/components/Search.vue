@@ -1,0 +1,28 @@
+<template>
+    <form name="form" method="get" @submit="submit()">
+        <div class="filter-group">
+            <button class="btn waves-effect" type="submit">
+                <i class="material-icons">search</i>
+            </button>
+            <div class="filter-warpper">
+                <input type="text" v-model="model" placeholder="Digite para pesquisar"/>
+            </div>
+        </div>
+    </form>
+</template>
+
+<script>
+    export default{
+        props:{
+            model:{
+                required: true,
+                type: String
+            }
+        },
+        methods:{
+            submit(){
+             this.$emit('on-submit');
+            }
+        }
+    }
+</script>

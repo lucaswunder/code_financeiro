@@ -1,17 +1,11 @@
 <template>
     <div class="container">
         <div class="row">
-            <div class="card-panel green lighten-3">
-                <span class="green-text text-darken-2">
-                    <h5>Minhas contas bancárias</h5>
-                </span>
-            </div>
+            <page-title>
+                <h5>Minhas contas bancárias</h5>
+            </page-title>
             <div class="card-panel z-depth-5">
-                <form>
-                    <button class="btn waves-effect">
-
-                    </button>
-                </form>
+                <search @on-submit="filter" :model.sync="search"></search>
                 <table class="bordered striped hightlight responsive-table">
                     <thead>
                     <tr>
@@ -46,7 +40,7 @@
             </div>
 
             <div class="fixed-action-btn">
-                <a class="btn-floating btn-large" href="#">
+                <a class="btn-floating btn-large" href="#" @click.prevent="">
                     <i class="large material-icons">add</i>
                 </a>
             </div>
@@ -73,11 +67,15 @@
     import {BankAccount} from '../../services/resources';
     import ModalComponent from '../../../../_default/components/Modal.vue';
     import PaginationComponent from '../Pagination.vue';
+    import PageTitleComponent from '../PageTitle.vue'
+    import SearchComponent from '../Search.vue'
 
     export default{
         components: {
             'modal': ModalComponent,
-            'pagination': PaginationComponent
+            'pagination': PaginationComponent,
+            'page-title': PageTitleComponent,
+            'search':SearchComponent
         },
         data(){
             return {
@@ -91,6 +89,7 @@
                     per_page: 0,
                     total: 0
                 },
+                search: "",
                 order: {
                     key: 'id',
                     sort: 'asc'
@@ -136,7 +135,8 @@
                 BankAccount.query({
                     page: this.pagination.current_page + 1,
                     orderBy: this.order.key,
-                    sortedBy: this.order.sort
+                    sortedBy: this.order.sort,
+                    search: this.search
                 }).then((response) => {
                     this.bankAccounts = response.data.data;
                     let pagination = response.data.meta.pagination;
@@ -147,6 +147,9 @@
             sortBy(key){
                 this.order.key = key;
                 this.order.sort = this.order.sort == 'desc' ? 'asc' : 'desc';
+                this.getBankAccounts();
+            },
+            filter(){
                 this.getBankAccounts();
             }
         },

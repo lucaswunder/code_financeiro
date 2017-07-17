@@ -5,13 +5,9 @@ namespace CodeFin\Http\Controllers\Admin;
 use CodeFin\Events\BankCreatedEvent;
 use CodeFin\Http\Controllers\Controller;
 use CodeFin\Http\Controllers\Response;
-use CodeFin\Http\Requests;
 use CodeFin\Http\Requests\BankCreateRequest;
 use CodeFin\Http\Requests\BankUpdateRequest;
-use CodeFin\Models\Bank;
 use CodeFin\Repositories\Interfaces\BankRepository;
-use Prettus\Validator\Contracts\ValidatorInterface;
-use Prettus\Validator\Exceptions\ValidatorException;
 
 
 class BanksController extends Controller
@@ -26,6 +22,7 @@ class BanksController extends Controller
     public function __construct(BankRepository $repository)
     {
         $this->repository = $repository;
+        $this->repository->skipPresenter(true);
     }
 
 
