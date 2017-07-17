@@ -40,7 +40,7 @@
             </div>
 
             <div class="fixed-action-btn">
-                <a class="btn-floating btn-large" href="#" @click.prevent="">
+                <a class="btn-floating btn-large" href="#" v-link="{name:'bank-account.create'}">
                     <i class="large material-icons">add</i>
                 </a>
             </div>
