@@ -27,7 +27,10 @@
                         <td>{{o.agency}}</td>
                         <td>{{o.account}}</td>
                         <td>
-                            <a v-link="{name: 'bank-account.update', params: {id: o.id} }">Editar</a>
+                            <i class="material-icons green-text" v-if="o.default">check</i>
+                        </td>
+                        <td>
+                            <a v-link="{name: 'bank-account.update', params: {id: o.id} }">Editar</a> |
                             <a href="#" @click.prevent="openModalDelete(o)">Excluir</a>
                         </td>
                     </tr>
@@ -102,7 +105,7 @@
                         },
                         name: {
                             label: 'Nome',
-                            width: '45%'
+                            width: '30%'
                         },
                         agency: {
                             label: 'Agência',
@@ -111,6 +114,10 @@
                         account: {
                             label: 'C/C',
                             width: '15%'
+                        },
+                        'default':{
+                            label:'Padrão',
+                            width:'15%'
                         }
                     }
                 }
@@ -123,6 +130,9 @@
             destroy(){
                 BankAccount.delete({id: this.bankAccountToDelete.id}).then((response) => {
                     this.bankAccounts.$remove(this.bankAccountToDelete);
+                    if(this.bankAccounts.length === 0 && this.pagination.current_page > 0){
+                        this.pagination.current_page--;
+                    }
                     this.bankAccountToDelete = null;
                     Materialize.toast('Conta bancária excluída com sucesso', 4000);
                 });
@@ -150,6 +160,7 @@
                 this.getBankAccounts();
             },
             filter(){
+                this.pagination.current_page = 0;
                 this.getBankAccounts();
             }
         },

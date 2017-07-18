@@ -3,6 +3,7 @@ import LogoutComponent from './components/Logout.vue';
 import DashboardComponent from './components/Dashboard.vue';
 import BankAccountListComponent from './components/bank-account/BankAccountList.vue';
 import BankAccountCreateComponent from './components/bank-account/BankAccountCreate.vue';
+import BankAccountUpdateComponent from './components/bank-account/BankAccountUpdate.vue';
 
 export default{
     '/login': {
@@ -20,7 +21,7 @@ export default{
         component: DashboardComponent,
         auth: true
     },
-    '/bank_accounts': {
+    '/bank-accounts': {
         component: {template: "<router-view></router-view>"},
         subRoutes: {
             '/': {
@@ -33,7 +34,7 @@ export default{
             },
             '/:id/update': {
                 name: 'bank-account.update',
-                component: BankAccountListComponent
+                component: BankAccountUpdateComponent
             }
         }
     }

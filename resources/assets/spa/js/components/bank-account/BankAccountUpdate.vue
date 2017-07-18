@@ -1,5 +1,4 @@
-<template src="./_form.html">
-</template>
+<template src="./_form.html"></template>
 
 <script>
     import {BankAccount, Bank} from '../../services/resources';
@@ -11,7 +10,7 @@
         },
         data(){
             return {
-            title:'Nova Conta',
+                title:'Edição Conta',
                 bankAccount: {
                     name: '',
                     agency: '',
@@ -24,11 +23,13 @@
         },
         created(){
             this.getBanks();
+            this.getBankAccount(this.$route.params.id);
         },
         methods: {
             submit(){
-                BankAccount.save({}, this.bankAccount).then(() => {
-                    Materialize.toast('Conta bancária criada com sucesso!', 4000);
+                let id = this.$route.params.id;
+                BankAccount.update({id:id}, this.bankAccount).then(()=>{
+                    Materialize.toast('Conta bancária atualizada com sucesso!', 4000);
                     this.$router.go({name: 'bank-account.list'});
                 })
             },
@@ -36,6 +37,11 @@
                 Bank.query().then((response) => {
                     this.banks = response.data.data;
                 });
+            },
+            getBankAccount(id){
+                BankAccount.get({id:id}).then((response)=>{
+                    this.bankAccount = response.data.data;
+                })
             }
         }
     };
