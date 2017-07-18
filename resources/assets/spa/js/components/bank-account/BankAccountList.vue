@@ -1,54 +1,64 @@
 <template>
-    <div class="container">
-        <div class="row">
-            <page-title>
-                <h5>Minhas contas bancárias</h5>
-            </page-title>
-            <div class="card-panel z-depth-5">
-                <search @on-submit="filter" :model.sync="search"></search>
-                <table class="bordered striped hightlight responsive-table">
-                    <thead>
-                    <tr>
-                        <th v-for="(key,o) in table.headers" :width="o.width">
-                            <a href="#" @click.prevent="sortBy(key)">
-                                {{o.label}}
-                                <i class="material-icons right" v-if="order.key == key">
-                                    {{order.sort == 'asc' ? 'arrow_drop_up' : 'arrow_drop_down' }}
-                                </i>
-                            </a>
-                        </th>
-                        <th>Ações</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr v-for="(index,o) in bankAccounts">
-                        <td>{{o.id}}</td>
-                        <td>{{o.name}}</td>
-                        <td>{{o.agency}}</td>
-                        <td>{{o.account}}</td>
-                        <td>
-                            <i class="material-icons green-text" v-if="o.default">check</i>
-                        </td>
-                        <td>
-                            <a v-link="{name: 'bank-account.update', params: {id: o.id} }">Editar</a> |
-                            <a href="#" @click.prevent="openModalDelete(o)">Excluir</a>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                <pagination :current-page.sync="pagination.current_page"
-                            :per-page="pagination.per_page"
-                            :total-records="pagination.total">
-                </pagination>
-            </div>
+    <!--<div class="container">-->
+    <div class="row">
+        <page-title>
+            <h5>Minhas contas bancárias</h5>
+        </page-title>
+        <div class="card-panel z-depth-5">
+            <search @on-submit="filter" :model.sync="search"></search>
+            <table class="bordered striped hightlight responsive-table">
+                <thead>
+                <tr>
+                    <th v-for="(key,o) in table.headers" :width="o.width">
+                        <a href="#" @click.prevent="sortBy(key)">
+                            {{o.label}}
+                            <i class="material-icons right" v-if="order.key == key">
+                                {{order.sort == 'asc' ? 'arrow_drop_up' : 'arrow_drop_down' }}
+                            </i>
+                        </a>
+                    </th>
+                    <th>Ações</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(index,o) in bankAccounts">
+                    <td>{{o.id}}</td>
+                    <td>{{o.name}}</td>
+                    <td>{{o.agency}}</td>
+                    <td>{{o.account}}</td>
+                    <td>
+                        <div class="row valign-wrapper">
+                            <div class="col s2">
+                                <img :src="o.bank.data.logo" class="bank-logo"/>
+                            </div>
+                            <div class="col s10">
+                                <span class="left">{{o.bank.data.name}}</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <i class="material-icons green-text" v-if="o.default">check</i>
+                    </td>
+                    <td>
+                        <a v-link="{name: 'bank-account.update', params: {id: o.id} }">Editar</a> |
+                        <a href="#" @click.prevent="openModalDelete(o)">Excluir</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <pagination :current-page.sync="pagination.current_page"
+                        :per-page="pagination.per_page"
+                        :total-records="pagination.total">
+            </pagination>
+        </div>
 
-            <div class="fixed-action-btn">
-                <a class="btn-floating btn-large" href="#" v-link="{name:'bank-account.create'}">
-                    <i class="large material-icons">add</i>
-                </a>
-            </div>
+        <div class="fixed-action-btn">
+            <a class="btn-floating btn-large" href="#" v-link="{name:'bank-account.create'}">
+                <i class="large material-icons">add</i>
+            </a>
         </div>
     </div>
+    <!--</div>-->
     <modal :modal="modal">
         <div slot="content" v-if="bankAccountToDelete">
             <h4>Mensagem de confirmação</h4>
@@ -78,7 +88,7 @@
             'modal': ModalComponent,
             'pagination': PaginationComponent,
             'page-title': PageTitleComponent,
-            'search':SearchComponent
+            'search': SearchComponent
         },
         data(){
             return {
@@ -101,7 +111,7 @@
                     headers: {
                         id: {
                             label: '#',
-                            width: '10%'
+                            width: '7%'
                         },
                         name: {
                             label: 'Nome',
@@ -109,15 +119,19 @@
                         },
                         agency: {
                             label: 'Agência',
-                            width: '15%'
+                            width: '13%'
                         },
                         account: {
                             label: 'C/C',
-                            width: '15%'
+                            width: '13%'
                         },
-                        'default':{
-                            label:'Padrão',
-                            width:'15%'
+                        'banks:bank_id|banks.name': {
+                            label: 'Banco',
+                            width: '17%'
+                        },
+                        'default': {
+                            label: 'Padrão',
+                            width: '5%'
                         }
                     }
                 }
@@ -130,7 +144,7 @@
             destroy(){
                 BankAccount.delete({id: this.bankAccountToDelete.id}).then((response) => {
                     this.bankAccounts.$remove(this.bankAccountToDelete);
-                    if(this.bankAccounts.length === 0 && this.pagination.current_page > 0){
+                    if (this.bankAccounts.length === 0 && this.pagination.current_page > 0) {
                         this.pagination.current_page--;
                     }
                     this.bankAccountToDelete = null;
@@ -146,7 +160,8 @@
                     page: this.pagination.current_page + 1,
                     orderBy: this.order.key,
                     sortedBy: this.order.sort,
-                    search: this.search
+                    search: this.search,
+                    include: 'bank'
                 }).then((response) => {
                     this.bankAccounts = response.data.data;
                     let pagination = response.data.meta.pagination;
