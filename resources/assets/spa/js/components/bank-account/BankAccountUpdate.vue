@@ -39,7 +39,7 @@
                 });
             },
             getBankAccount(id){
-                BankAccount.get({id:id}).then((response)=>{
+                BankAccount.get({id:id,include:'bank'}).then((response)=>{
                     this.bankAccount = response.data.data;
                 })
             }

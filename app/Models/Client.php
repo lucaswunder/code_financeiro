@@ -6,10 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 
-class BanksRepository extends Model implements Transformable
+class Client extends Model implements Transformable
 {
     use TransformableTrait;
 
-    protected $fillable = [];
+    protected $fillable = [
+        'name'
+    ];
 
+
+    public function users(){
+        return $this->hasMany(User::class);
+    }
 }
