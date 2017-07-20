@@ -6,7 +6,6 @@
 @import "variables";
 // Materialize CSS
 @import "node_modules/materialize-css/sass/materialize";
-
 @import "../../_default/sass/default";
 
 #app {
@@ -49,4 +48,24 @@ body {
 .filter-warpper {
   overflow: hidden;
   padding-right: 10px;
+}
+
+.category-tree {
+  @extend .collection;
+  border: none;
+  margin: 0;
+}
+
+.category-child {
+  @extend .collection-item;
+  padding-left: 50px;
+}
+
+.category-symbol {
+  line-height: 36px;
+  height: 36px;
+  i {
+    line-height: inherit;
+    height: 36px;
+  }
 }

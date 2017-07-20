@@ -1,7 +1,12 @@
 <template>
-    <ul>
-        <li v-for="(index,o) in categories">
-            {{ o.name }}
+    <ul class="category-tree">
+        <li class="category-child" v-for="(index,o) in categories">
+            <div class="valign-wrapper">
+                <a href="#" class="category-symbol green-text">
+                    <i class="material-icons">folder</i>
+                </a>
+                <span class="valign">{{ o.name }}</span>
+            </div>
             <category-tree :categories="o.children.data"></category-tree>
         </li>
     </ul>
@@ -10,8 +15,8 @@
 <script>
     export default{
         name: 'category-tree',
-        props:{
-            categories:{
+        props: {
+            categories: {
                 type: Array,
                 required: true
             }
