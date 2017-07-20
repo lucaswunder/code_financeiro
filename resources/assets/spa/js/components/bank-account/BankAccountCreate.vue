@@ -21,6 +21,9 @@
                     bank_id: '',
                     'default': false,
                 },
+                bank:{
+                  name:''
+                },
                 banks: []
             };
         },
@@ -60,7 +63,6 @@
                         },
                         onSelect(item){
                             self.bankAccount.bank_id = item.id;
-                            console.log(item);
                         }
                     });
                 });

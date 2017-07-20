@@ -31,7 +31,7 @@
                         <!--<option value="" disabled selected>Escolha um Banco</option>-->
                         <!--<option v-for="o in banks" :value="o.id">{{o.name}}</option>-->
                         <!--</select>-->
-                        <input type="text" placeholder="Procure o banco"
+                        <input type="text" placeholder="Procure o banco" :value="bank.name"
                                id="bank-id" autocomplete="off" data-activates="bank-id-dropdown"
                                data-beloworigin="true"
                         />
