@@ -2,11 +2,22 @@
     <ul class="category-tree">
         <li class="category-child" v-for="(index,o) in categories">
             <div class="valign-wrapper">
-                <a href="#" class="category-symbol"
+                <a :data-activates="dropdownId(o)" href="#" class="category-symbol"
                    :class="{'green-text': o.children.data.length > 0,
                    'grey-text': !o.children.data.length}">
-                    <i class="material-icons">{{ categoryIcon(o) }}</i>
+                    <i class="material-icons">{{ this.categoryIcon(o) }}</i>
                 </a>
+                <ul :id="dropdownId(o)" class="dropdown-content">
+                    <li>
+                        <a href="#" @click.prevent="categoryNew(o)">Adicionar</a>
+                    </li>
+                    <li>
+                        <a href="#"@click.prevent="categoryEdit(o)">Editar</a>
+                    </li>
+                    <li>
+                        <a href="#">Excluir</a>
+                    </li>
+                </ul>
                 <span class="valign">{{{categoryText(o)}}}</span>
             </div>
             <category-tree :categories="o.children.data"></category-tree>
@@ -15,7 +26,7 @@
 </template>
 
 <script>
-    export default{
+    export default {
         name: 'category-tree',
         props: {
             categories: {
@@ -23,13 +34,35 @@
                 required: true
             }
         },
+        watch: {
+            categories: {
+                handler(categories) {
+                    $('.category-child > div > a').dropdown({
+                        hover:true,
+                        inDuration: 300,
+                        outDuration: 400,
+                        belowOrigin: true
+                    });
+                },
+                deep: true
+            }
+        },
         methods: {
-            categoryText(category){
+            dropdownId(category) {
+                return `category-tree-dropdown-${category.id}`;
+            },
+            categoryText(category) {
                 return category.children.data.length > 0 ? `<strong>${category.name}</strong>` :
                     category.name;
             },
-            categoryIcon(category){
+            categoryIcon(category) {
                 return category.children.data.length > 0 ? 'folder' : 'label';
+            },
+            categoryNew(category){
+                this.$dispatch('category-new',category);
+            },
+            categoryEdit(category){
+                this.$dispatch('category-edit',category);
             }
         }
     }
