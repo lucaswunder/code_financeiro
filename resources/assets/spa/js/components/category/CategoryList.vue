@@ -12,12 +12,17 @@
                        @save-category="saveCategory">
             <span slot="title">{{title}}</span>
             <div slot="footer">
-                <button type="submit" class="btn btn-flat waves-effect green lighten-2 modal-close modal-action">
+                <button class="btn btn-flat waves-effect green lighten-2 modal-close modal-action">
                     Ok
                 </button>
-                <button class="btn btn-flat red waves-effect waves-red modal-close modal-action">Cancelar</button>
+                <a class="btn btn-flat red waves-effect waves-red modal-close modal-action">Cancelar</a>
             </div>
         </category-save>
+        <div class="fixed-action-btn">
+            <button class="btn-floating btn-large" @click="modalNew(null)">
+                <i class="large material-icons">add</i>
+            </button>
+        </div>
     </div>
 </template>
 
@@ -26,7 +31,7 @@
     import CategoryTreeComponent from '../category/CategoryTree.vue';
     import CategorySaveComponent from '../category/CategorySave.vue';
     import {Category} from '../../services/resources';
-    import {CategoryFormat} from '../../services/category-nsm';
+    import {CategoryFormat, CategoryService} from '../../services/category-nsm';
 
 
     export default {
@@ -44,7 +49,8 @@
                     name: '',
                     parent_id: 0
                 },
-                title: 'Adicionar Categoria',
+                parent: null,
+                title: '',
                 modalOptionsSave: {
                     id: 'modal-category-save'
                 }
@@ -61,10 +67,19 @@
                 })
             },
             saveCategory() {
-                console.log('save');
+                CategoryService.new(this.categorySave, this.parent, this.categories).then(response => {
+                    Materialize.toast('Categoria Adicionada com sucesso', 4000);
+                    this.resetScope();
+                });
             },
             modalNew(category) {
-                this.categorySave = category;
+                this.title = 'Nova Categoria';
+                this.categorySave = {
+                    id: 0,
+                    name: '',
+                    parent_id: category === null ? null : category.id
+                };
+                this.parent = category;
                 $(`#${this.modalOptionsSave.id}`).modal('open');
             },
             modalEdit(category) {
@@ -72,6 +87,15 @@
             },
             formatCategories() {
                 this.categoriesFormatted = CategoryFormat.getCategoriesFormatted(this.categories);
+            },
+            resetScope() {
+                this.categorySave = {
+                    id: 0,
+                    name: '',
+                    parent_id: 0
+                };
+                this.parent = null;
+                this.formatCategories();
             }
         },
         computed: {

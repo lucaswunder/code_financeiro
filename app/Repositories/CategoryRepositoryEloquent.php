@@ -17,31 +17,39 @@ class CategoryRepositoryEloquent extends BaseRepository implements CategoryRepos
 {
     public function create(array $attributes)
     {
-        if(isset($attributes['parent_id'])){
+        Category::$enableTenant = false;
+        if (isset($attributes['parent_id'])) {
             $skipPresenter = $this->skipPresenter;
             $this->skipPresenter(true);
             $parent = $this->find($attributes['parent_id']);
             $this->skipPresenter = $skipPresenter;
+            Category::$enableTenant = false;
             $child = $parent->children()->create($attributes);
-            return $this->parserResult($child);
-        }else{
-            return parent::create($attributes);
+            Category::$enableTenant = true;
+            $result = $this->parserResult($child);
+        } else {
+            $result = parent::create($attributes);
         }
+        Category::$enableTenant = true;
+        return $result;
     }
 
     public function update(array $attributes, $id)
     {
-        if(isset($attributes['parent_id'])){
+        Category::$enableTenant = false;
+        if (isset($attributes['parent_id'])) {
             $skipPresenter = $this->skipPresenter;
             $this->skipPresenter(true);
             $child = $this->find($id);
             $child->parent_id = $attributes['parent_id'];
             $child->save();
             $this->skipPresenter = $skipPresenter;
-            return $this->parserResult($child);
-        }else{
-            return parent::update($attributes);
+            $result = $this->parserResult($child);
+        } else {
+            $result = parent::update($attributes);
         }
+        Category::$enableTenant = true;
+        return $result;
     }
 
 
@@ -55,7 +63,6 @@ class CategoryRepositoryEloquent extends BaseRepository implements CategoryRepos
         return Category::class;
     }
 
-    
 
     /**
      * Boot up the repository, pushing criteria

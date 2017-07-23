@@ -1,3 +1,5 @@
+import {Category} from "./resources";
+
 // Reponsável por formatar as categorias
 export class CategoryFormat {
 
@@ -25,5 +27,27 @@ export class CategoryFormat {
             this._formatCategories(category.children.data, categoryCollection);
         }
         return categoryCollection;
+    }
+}
+
+export class CategoryService {
+
+    static new(category, parent, categories) {
+        let categoryCopy = $.extend(true, {}, category);
+
+        if(categoryCopy.parent_id === null){
+            delete categoryCopy.parent_id;
+        }
+
+        return Category.save(categoryCopy).then(response => {
+            let categoryAdded = response.data.data;
+            if (categoryAdded.parent_id === null) {
+                categories.push(categoryAdded);
+            }
+            else {
+                parent.children.data.push(categoryAdded);
+            }
+            return response;
+        });
     }
 }
