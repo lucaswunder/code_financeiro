@@ -34,7 +34,7 @@
                         </ul>
                         <ul id="nav-mobile" class="side-nav">
                             <li v-for="o in menus">
-                                <a v-link="{name: o.url}">{{o.name}}</a>
+                                <a v-link="{name: o.routeName}">{{o.name}}</a>
                             </li>
                         </ul>
                     </div>

@@ -4,10 +4,10 @@
             <h5>Administração de Categorias</h5>
         </page-title>
         <div class="card-panel z-depth-5">
-            <select-material :options="options" :selected="selected"></select-material>
             <category-tree :categories="categories"></category-tree>
         </div>
-        <category-save :modal-options="modalOptionsSave" :category.sync="categorySave" @save-category="saveCategory">
+        <category-save :cp-options="cpOptions" :modal-options="modalOptionsSave" :category.sync="categorySave"
+                       @save-category="saveCategory">
             <span slot="title">{{title}}</span>
             <div slot="footer">
                 <button type="submit" class="btn btn-flat waves-effect green lighten-2 modal-close modal-action">
@@ -24,18 +24,18 @@
     import CategoryTreeComponent from '../category/CategoryTree.vue';
     import CategorySaveComponent from '../category/CategorySave.vue';
     import {Category} from '../../services/resources';
-    import SelectMaterial from '../../../../_default/components/SelectMaterial.vue';
+
 
     export default {
         components: {
             'page-title': PageTitleComponent,
             'category-tree': CategoryTreeComponent,
-            'category-save': CategorySaveComponent,
-            'select-material': SelectMaterial
+            'category-save': CategorySaveComponent
         },
         data() {
             return {
                 categories: [],
+                categoriesFormatted: [],
                 categorySave: {
                     id: 0,
                     name: '',
@@ -44,15 +44,7 @@
                 title: 'Adicionar Categoria',
                 modalOptionsSave: {
                     id: 'modal-category-save'
-                },
-                options: {
-                    data: [
-                        {id: 1, text: 'aple'},
-                        {id: 2, text: 'micro'},
-                        {id: 3, text: 'google'}
-                    ]
-                },
-                selected: 3
+                }
             }
         },
         created() {
@@ -62,6 +54,7 @@
             getCategories() {
                 Category.query().then(response => {
                     this.categories = response.data.data;
+                    this.formatCategories();
                 })
             },
             saveCategory() {
@@ -73,6 +66,22 @@
             },
             modalEdit(category) {
 
+            },
+            formatCategories() {
+                for (let category of this.categories) {
+                    this.categoriesFormatted.push({
+                        id: category.id,
+                        text: category.name
+                    });
+                }
+            }
+        },
+        computed: {
+            //opções para o campo selec 2  de categorias pai
+            cpOptions() {
+                return {
+                    data: this.categoriesFormatted
+                }
             }
         },
         events: {
