@@ -6,14 +6,16 @@
         <div class="card-panel z-depth-5">
             <category-tree :categories="categories"></category-tree>
         </div>
-        <category-save :cp-options="cpOptions" :modal-options="modalOptionsSave" :category.sync="categorySave"
+        <category-save :cp-options="cpOptions"
+                       :modal-options="modalOptionsSave"
+                       :category.sync="categorySave"
                        @save-category="saveCategory">
             <span slot="title">{{title}}</span>
             <div slot="footer">
                 <button type="submit" class="btn btn-flat waves-effect green lighten-2 modal-close modal-action">
                     Ok
                 </button>
-                <button class="btn btn-flat waves-effect waves-red modal-close modal-action">Cancelar</button>
+                <button class="btn btn-flat red waves-effect waves-red modal-close modal-action">Cancelar</button>
             </div>
         </category-save>
     </div>
@@ -24,6 +26,7 @@
     import CategoryTreeComponent from '../category/CategoryTree.vue';
     import CategorySaveComponent from '../category/CategorySave.vue';
     import {Category} from '../../services/resources';
+    import {CategoryFormat} from '../../services/category-nsm';
 
 
     export default {
@@ -68,19 +71,22 @@
 
             },
             formatCategories() {
-                for (let category of this.categories) {
-                    this.categoriesFormatted.push({
-                        id: category.id,
-                        text: category.name
-                    });
-                }
+                this.categoriesFormatted = CategoryFormat.getCategoriesFormatted(this.categories);
             }
         },
         computed: {
             //opções para o campo selec 2  de categorias pai
             cpOptions() {
                 return {
-                    data: this.categoriesFormatted
+                    data: this.categoriesFormatted,
+                    templateResult(category) {
+                        let margin = '&nbsp'.repeat(category.level * 6)
+                        let text = category.hasChildren ? `<strong>${category.text}</strong>` : category.text;
+                        return `${margin}${text}`;
+                    },
+                    escapeMarkup(m) {
+                        return m;
+                    }
                 }
             }
         },
