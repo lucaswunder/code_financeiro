@@ -2,7 +2,7 @@ var webpack = require('webpack');
 var path = require('path');
 
 module.exports = {
-    devtol: 'source-map',
+    devtool: 'source-map',
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
         new webpack.WatchIgnorePlugin([

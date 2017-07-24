@@ -15,7 +15,7 @@
                 <button class="btn btn-flat waves-effect green lighten-2 modal-close modal-action">
                     Ok
                 </button>
-                <a class="btn btn-flat red waves-effect waves-red modal-close modal-action">Cancelar</a>
+                <button type="button" class="btn btn-flat red waves-effect waves-red modal-close modal-action">Cancelar</button>
             </div>
         </category-save>
         <div class="fixed-action-btn">
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-    import PageTitleComponent from '../PageTitle.vue''';
+    import PageTitleComponent from '../PageTitle.vue';
     import CategoryTreeComponent from '../category/CategoryTree.vue';
     import CategorySaveComponent from '../category/CategorySave.vue';
     import {Category} from '../../services/resources';
@@ -69,7 +69,7 @@
             },
             saveCategory() {
                 CategoryService.save(this.categorySave,this.parent,this.categories, this.category).then(response =>{
-                    if(this.categorySave === 0 ){
+                    if(this.categorySave.id === 0 ){
                         Materialize.toast('Categoria Adicionada com sucesso', 4000);
                     }else{
                         Materialize.toast('Categoria Atualizada com sucesso', 4000);
