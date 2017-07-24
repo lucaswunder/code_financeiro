@@ -27,7 +27,7 @@
 </template>
 
 <script>
-    import PageTitleComponent from '../PageTitle.vue';
+    import PageTitleComponent from '../PageTitle.vue''';
     import CategoryTreeComponent from '../category/CategoryTree.vue';
     import CategorySaveComponent from '../category/CategorySave.vue';
     import {Category} from '../../services/resources';
@@ -49,6 +49,7 @@
                     name: '',
                     parent_id: 0
                 },
+                category: null,
                 parent: null,
                 title: '',
                 modalOptionsSave: {
@@ -67,8 +68,12 @@
                 })
             },
             saveCategory() {
-                CategoryService.new(this.categorySave, this.parent, this.categories).then(response => {
-                    Materialize.toast('Categoria Adicionada com sucesso', 4000);
+                CategoryService.save(this.categorySave,this.parent,this.categories, this.category).then(response =>{
+                    if(this.categorySave === 0 ){
+                        Materialize.toast('Categoria Adicionada com sucesso', 4000);
+                    }else{
+                        Materialize.toast('Categoria Atualizada com sucesso', 4000);
+                    }
                     this.resetScope();
                 });
             },
@@ -89,7 +94,8 @@
                     name: category.name,
                     parent_id: category.parent_id
                 };
-                this.parent = category;
+                this.category = category;
+                this.parent = parent;
                 $(`#${this.modalOptionsSave.id}`).modal('open');
             },
             formatCategories() {
@@ -101,6 +107,7 @@
                     name: '',
                     parent_id: 0
                 };
+                this.category = null,
                 this.parent = null;
                 this.formatCategories();
             }
