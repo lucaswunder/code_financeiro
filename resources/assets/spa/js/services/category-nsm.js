@@ -1,8 +1,6 @@
 import {Category} from "./resources";
 
-// Reponsável por formatar as categorias
 export class CategoryFormat {
-
     static getCategoriesFormatted(categories) {
         let categoriesFormatted = this._formatCategories(categories);
         categoriesFormatted.unshift({
@@ -13,7 +11,6 @@ export class CategoryFormat {
         });
         return categoriesFormatted;
     }
-
 
     static _formatCategories(categories, categoryCollection = []) {
         for (let category of categories) {
@@ -31,14 +28,12 @@ export class CategoryFormat {
 }
 
 export class CategoryService {
-
     static new(category, parent, categories) {
         let categoryCopy = $.extend(true, {}, category);
 
-        if(categoryCopy.parent_id === null){
+        if (categoryCopy.parent_id === null) {
             delete categoryCopy.parent_id;
         }
-
         return Category.save(categoryCopy).then(response => {
             let categoryAdded = response.data.data;
             if (categoryAdded.parent_id === null) {
@@ -49,5 +44,50 @@ export class CategoryService {
             }
             return response;
         });
+    }
+
+    static edit(category, parent, categories, categoryOriginal) {
+        let categoryCopy = $.extend(true, {}, category);
+        if (categoryCopy.parent_id === null) {
+            delete categoryCopy.parent_id;
+        }
+        let self = this;
+        return Category.update({id: categoryCopy.id}, categoryCopy).then(response => {
+            let categoryUpdated = response.data.data;
+            if (categoryUpdated.parent_id === null) {
+                if (parent) {
+                    parent.children.data.$remove(categoryOriginal);
+                    categories.push(categoryUpdated);
+                    return response;
+                }
+            } else {
+                if (parent) {
+                    if (parent.id != categoryUpdated.parent) {
+                        parent.children.data.$remove(categoryOriginal);
+                        self._addChild(categoryUpdated, categories);
+                        return response;
+                    }
+                } else {
+                    categories.$remove(categoryOriginal);
+                    self._addChild(categoryUpdated, categories);
+                    return response;
+                }
+            }
+            return response;
+        });
+    }
+
+    static _addChild(child, categories) {
+        let parent = this._findParent(child.parent_id, categories);
+        parent.children.data.push(child);
+    }
+
+    static _findParent(id, categories) {
+        for (let category of categories) {
+            if (id == category.id) {
+                return category;
+            }
+            return this._findParent(id, category.children.data);
+        }
     }
 }
