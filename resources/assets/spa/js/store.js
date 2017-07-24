@@ -10,7 +10,13 @@ const state = {
     check: JwtToken.token != null
 };
 
-export default new Vuex.Store({state});
+const mutations = {
+    setUser(state) {
+        state.user = {name: 'lucas'};
+    }
+};
+
+export default new Vuex.Store({state, mutations});
 
 /*
 
