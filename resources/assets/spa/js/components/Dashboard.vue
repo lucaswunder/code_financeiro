@@ -8,11 +8,17 @@
                 </div>
             </div>
         </div>
+        {{user.name}}
     </div>
 </template>
 <script>
-    export default{
-        ready(){
+    import store from '../store';
+
+    export default {
+        computed: {
+            user(){
+                return store.state.user;
+            }
         }
     }
 </script>

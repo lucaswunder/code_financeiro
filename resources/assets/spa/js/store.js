@@ -1,8 +1,18 @@
-import JwtToken from "./jwt-token";
-import LocalStorage from "./localStorage";
-import {User} from './resources';
+import JwtToken from "./services/jwt-token";
+import LocalStorage from "./services/localStorage";
+import {User} from './services/resources';
+import Vuex from 'vuex';
 
 const USER = 'user';
+
+const state = {
+    user: LocalStorage.getObject(USER),
+    check: JwtToken.token != null
+};
+
+export default new Vuex.Store({state});
+
+/*
 
 const afterLogin = function(response){
     this.user.check = true;
@@ -21,11 +31,11 @@ export default {
                 return;
             }
             this._data = value;
-            LocalStorage.setObject(USER, value);
+            LocalStorage.setObject(User, value);
         },
         get data(){
             if(!this._data){
-                this._data = LocalStorage.getObject(USER);
+                this._data = LocalStorage.getObject(User);
             }
             return this._data;
         },
@@ -45,7 +55,7 @@ export default {
         };
 
         return JwtToken.revokeToken().
-            then(afterLogout)
+        then(afterLogout)
             .catch(afterLogout);
     },
     clearAuth(){
@@ -53,3 +63,5 @@ export default {
         this.user.check = false;
     }
 }
+
+*/
