@@ -40,7 +40,6 @@
     </div>
 </template>
 <script type="text/javascript">
-    //    import Auth from "../services/auth";
     import store from "../store/store";
 
     export default {
@@ -58,9 +57,7 @@
         },
         methods: {
             login() {
-                store.dispatch('login',this.user).then(() => {
-                    this.$router.go({name: 'dashboard'});
-                })
+                store.dispatch('login', this.user).then(() => this.$router.go({name: 'dashboard'}))
                     .catch((responseError) => {
                         switch (responseError.status) {
                             case 401:

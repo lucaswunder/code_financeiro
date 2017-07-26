@@ -4,7 +4,6 @@ import {User} from '../services/resources';
 
 const USER = 'user';
 
-
 const state = {
     user: LocalStorage.getObject(USER) || {name: ''},
     check: JwtToken.token != null
@@ -13,7 +12,7 @@ const state = {
 const mutations = {
     setUser(state, user) {
         state.user = user;
-        if (user != null) {
+        if (user !== null) {
             LocalStorage.setObject(USER, user);
         } else {
             LocalStorage.remove(USER);
@@ -35,27 +34,28 @@ const actions = {
             return response;
         });
     },
-    getUser(context) {
-        return User.get().then((response) => {
-            context.commit('setUser', response.data);
-        });
-    },
-    clearAuth(context) {
-        context.commit('unauthenticated');
-        context.commit('setUser', null);
-    },
     logout(context) {
         let afterLogout = (response) => {
             context.dispatch('clearAuth');
             return response;
         };
-
         return JwtToken.revokeToken()
             .then(afterLogout)
             .catch(afterLogout);
+    },
+    clearAuth(context) {
+        context.commit('unauthenticated');
+        context.commit('setUser', null);
+    },
+    getUser(context) {
+        return User.get().then((response) => {
+            context.commit('setUser', response.data);
+        });
     }
 };
 
-const module = {state, mutations, actions};
+const module = {
+    state, mutations, actions
+};
 
 export default module;
