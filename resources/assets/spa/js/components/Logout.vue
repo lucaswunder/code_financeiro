@@ -11,19 +11,20 @@
     </div>
 </template>
 <script type="text/javascript">
-    import Auth from "../services/auth";
-    export default{
-        ready(){
+    import store from "../store/store";
+
+    export default {
+        ready() {
             setTimeout(() => {
                 this.logout();
-            },1000);
+            }, 1000);
         },
         methods: {
-            logout(){
+            logout() {
                 let goToLogin = () => this.$router.go({name: 'auth.login'});
-                Auth.logout()
-                        .then(goToLogin)
-                        .catch(goToLogin);
+                store.dispatch('logout')
+                    .then(goToLogin)
+                    .catch(goToLogin);
             }
         }
     }
