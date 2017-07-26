@@ -1,37 +1,58 @@
 import {BankAccount} from "../services/resources"
+import SearchOptions from '../../js/services/search-options';
+
 
 const state = {
     bankAccounts: [],
     bankAccountDelete: null,
+    searchOptions: new SearchOptions('bank'),
 };
 
 const mutations = {
     set(state, bankAccounts) {
         state.bankAccounts = bankAccounts
     },
-    setDelete(state,bankAccount){
+    setDelete(state, bankAccount) {
         state.bankAccountDelete = bankAccount;
     },
-    'delete'(state){
+    'delete'(state) {
         state.bankAccounts.remove(state.bankAccountDelete);
+    },
+    setOrder(state, key) {
+        state.searchOptions.order.key = key;
+        let sort = state.searchOptions.order.sort;
+        state.searchOptions.order.sort = sort == 'desc' ? 'asc' : 'desc';
+    },
+    setPagination(state, pagination) {
+        state.searchOptions.pagination = pagination;
+    },
+    setCurrentPage(state, currentPage) {
+        state.searchOptions.pagination.current_page = currentPage;
+    },
+    setFilter(state, filter) {
+        state.searchOptions.search = filter;
     }
 };
 
 const actions = {
-    query(context,{pagination,order,search}){
-        BankAccount.query({
-            page: pagination.current_page + 1,
-            orderBy: order.key,
-            sortedBy: order.sort,
-            search: search,
-            include: 'bank'
-        }).then((response) => {
+    query(context) {
+        let searchOptions = context.state.searchOptions;
+        return BankAccount.query(searchOptions.createOptions()).then((response) => {
             context.commit('set', response.data.data);
-            let pagination_ = response.data.meta.pagination;
-            pagination_.current_page--;
-            pagination = pagination_;
+            context.commit('setPagination', response.data.meta.pagination);
         });
-    }
+    },
+    queryWithSortBy(context, key) {
+        context.commit('setOrder', key);
+        context.dispatch('query');
+    },
+    queryWithPagination(context, currentPage) {
+        context.commit('setCurrentPage', currentPage);
+        context.dispatch('query');
+    },
+    queryWithFilter(context) {
+        context.dispatch('query');
+    },
 };
 
 const module = {state, mutations, actions};

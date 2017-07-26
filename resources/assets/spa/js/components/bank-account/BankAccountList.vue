@@ -12,8 +12,8 @@
                     <th v-for="(key,o) in table.headers" :width="o.width">
                         <a href="#" @click.prevent="sortBy(key)">
                             {{o.label}}
-                            <i class="material-icons right" v-if="order.key == key">
-                                {{order.sort == 'asc' ? 'arrow_drop_up' : 'arrow_drop_down' }}
+                            <i class="material-icons right" v-if="searchOptions.order.key == key">
+                                {{searchOptions.order.sort == 'asc' ? 'arrow_drop_up' : 'arrow_drop_down' }}
                             </i>
                         </a>
                     </th>
@@ -46,9 +46,9 @@
                 </tr>
                 </tbody>
             </table>
-            <pagination :current-page.sync="pagination.current_page"
-                        :per-page="pagination.per_page"
-                        :total-records="pagination.total">
+            <pagination :current-page.sync="searchOptions.pagination.current_page"
+                        :per-page="searchOptions.pagination.per_page"
+                        :total-records="searchOptions.pagination.total">
             </pagination>
         </div>
 
@@ -84,28 +84,18 @@
     import SearchComponent from '../Search.vue'
     import store from '../../store/store';
 
-    export default{
+    export default {
         components: {
             'modal': ModalComponent,
             'pagination': PaginationComponent,
             'page-title': PageTitleComponent,
             'search': SearchComponent
         },
-        data(){
+        data() {
             return {
                 bankAccountToDelete: null,
                 modal: {
                     id: "modal-delete"
-                },
-                pagination: {
-                    current_page: 0,
-                    per_page: 0,
-                    total: 0
-                },
-                search: "",
-                order: {
-                    key: 'id',
-                    sort: 'asc'
                 },
                 table: {
                     headers: {
@@ -137,16 +127,27 @@
                 }
             }
         },
-        computed:{
-          bankAccounts(){
-              return store.state.bankAccount.bankAccounts;
-          }
+        computed: {
+            bankAccounts() {
+                return store.state.bankAccount.bankAccounts;
+            },
+            searchOptions() {
+                return store.state.bankAccount.searchOptions;
+            },
+            search: {
+                get() {
+                    return store.state.bankAccount.searchOptions.search;
+                },
+                set(value) {
+                    store.commit('setFilter', value);
+                }
+            }
         },
-        created(){
-            this.getBankAccounts();
+        created() {
+            store.dispatch('query');
         },
         methods: {
-            destroy(){
+            destroy() {
                 BankAccount.delete({id: this.bankAccountToDelete.id}).then((response) => {
                     this.bankAccounts.$remove(this.bankAccountToDelete);
                     if (this.bankAccounts.length === 0 && this.pagination.current_page > 0) {
@@ -156,35 +157,20 @@
                     Materialize.toast('Conta bancária excluída com sucesso', 4000);
                 });
             },
-            openModalDelete(bankAccount){
+            openModalDelete(bankAccount) {
                 this.bankAccountToDelete = bankAccount;
                 $('#modal-delete').modal('open');
             },
-            getBankAccounts(){
-                store.dispatch('query',{
-                    pagination: this.pagination,
-                    order: this.order,
-                    search: this.search
-                }).then((response) => {
-//                    this.bankAccounts = response.data.data;
-//                    let pagination = response.data.meta.pagination;
-//                    pagination.current_page--;
-//                    this.pagination = pagination;
-                });
+            sortBy(key) {
+                store.dispatch('queryWithSortBy', key);
             },
-            sortBy(key){
-                this.order.key = key;
-                this.order.sort = this.order.sort == 'desc' ? 'asc' : 'desc';
-                this.getBankAccounts();
-            },
-            filter(){
-                this.pagination.current_page = 0;
-                this.getBankAccounts();
+            filter() {
+                store.dispatch('queryWithFilter');
             }
         },
         events: {
-            'pagination::changed'(page){
-                this.getBankAccounts();
+            'pagination::changed'(page) {
+                store.dispatch('queryWithPagination', page);
             }
         }
     }
