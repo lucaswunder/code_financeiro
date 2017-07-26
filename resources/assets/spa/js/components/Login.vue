@@ -40,9 +40,11 @@
     </div>
 </template>
 <script type="text/javascript">
-    import Auth from "../services/auth";
-    export default{
-        data(){
+    //    import Auth from "../services/auth";
+    import store from "../store";
+
+    export default {
+        data() {
             return {
                 user: {
                     email: '',
@@ -55,21 +57,20 @@
             }
         },
         methods: {
-            login(){
-                Auth.login(this.user.email, this.user.password)
-                        .then(()=> {
-                            this.$router.go({name: 'dashboard'});
-                        })
-                        .catch((responseError) => {
-                            switch(responseError.status){
-                                case 401:
-                                    this.error.message = responseError.data.message;
-                                    break;
-                                default:
-                                    this.error.message = "Login failed.";
-                            }
-                            this.error.error = true;
-                        });
+            login() {
+                store.dispatch('login',this.user).then(() => {
+                    this.$router.go({name: 'dashboard'});
+                })
+                    .catch((responseError) => {
+                        switch (responseError.status) {
+                            case 401:
+                                this.error.message = responseError.data.message;
+                                break;
+                            default:
+                                this.error.message = "Login failed.";
+                        }
+                        this.error.error = true;
+                    });
             }
         }
     }

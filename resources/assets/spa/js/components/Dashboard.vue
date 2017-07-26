@@ -8,23 +8,12 @@
                 </div>
             </div>
         </div>
-        <button type="button" @click="updateUser">Aa</button>
-        {{user.name}}
     </div>
 </template>
 <script>
     import store from '../store';
 
     export default {
-        computed: {
-            user(){
-                return store.state.user;
-            }
-        },
-        methods:{
-            updateUser(){
-                store.commit('setUser');
-            }
-        }
+
     }
 </script>
