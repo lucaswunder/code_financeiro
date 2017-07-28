@@ -2,10 +2,11 @@
 </template>
 
 <script>
-    import {BankAccount, Bank} from '../../services/resources';
+    import {BankAccount} from '../../services/resources';
     import PageTitleComponent from '../PageTitle.vue';
     import 'materialize-autocomplete';
     import _ from 'lodash';
+    import store from '../../store/store';
 
     export default{
         components: {
@@ -27,6 +28,11 @@
                 banks: []
             };
         },
+        computed:{
+            banks() {
+                return store.state.bank.banks;
+            }
+        },
         created(){
             this.getBanks();
         },
@@ -38,8 +44,7 @@
                 })
             },
             getBanks(){
-                Bank.query().then((response) => {
-                    this.banks = response.data.data;
+                store.dispatch('bank/query').then((response) => {
                     this.initAutoComplete();
                 });
             },

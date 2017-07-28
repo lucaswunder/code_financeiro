@@ -1,14 +1,23 @@
 import {BankAccount} from "../services/resources"
 import SearchOptions from '../../js/services/search-options';
 
-
 const state = {
     bankAccounts: [],
     bankAccountDelete: null,
+    bankAccountSave: {
+        name: 'minha conta',
+        agency: '',
+        account: '',
+        bank_id: '',
+        'default': false,
+    },
     searchOptions: new SearchOptions('bank'),
 };
 
 const mutations = {
+    updateName(state, name) {
+        state.bankAccountSave.name = name;
+    },
     set(state, bankAccounts) {
         state.bankAccounts = bankAccounts
     },
@@ -16,7 +25,7 @@ const mutations = {
         state.bankAccountDelete = bankAccount;
     },
     'delete'(state) {
-        state.bankAccounts.remove(state.bankAccountDelete);
+        state.bankAccounts.$remove(state.bankAccountDelete);
     },
     setOrder(state, key) {
         state.searchOptions.order.key = key;
@@ -53,8 +62,24 @@ const actions = {
     queryWithFilter(context) {
         context.dispatch('query');
     },
+    'delete'(context) {
+        let id = context.state.bankAccountDelete.id;
+
+        return BankAccount.delete({id: id}).then((response) => {
+            context.commit('delete');
+            context.commit('setDelete', null);
+
+            let bankAccounts = context.state.bankAccounts;
+            let pagination = context.state.searchOptions.pagination;
+
+            if (bankAccounts.length === 0 && pagination.current_page > 0) {
+                context.commit('setCurrentPage', pagination.current_page--);
+            }
+            return response;
+        });
+    }
 };
 
-const module = {state, mutations, actions};
+const module = {namespaced: true, state, mutations, actions};
 
 export default module;
