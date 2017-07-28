@@ -1,4 +1,5 @@
 import {Bank} from "../services/resources"
+import _ from 'lodash';
 
 const state = {
     banks: [],
@@ -18,6 +19,25 @@ const actions = {
     }
 };
 
-const module = {namespaced: true, state, mutations, actions};
+const getters = {
+    filterBankByName: (state) => (name) => {
+        let banks = _.filter(state.banks, (o) => {
+            return _.include(o.name.toLowerCase(), name.toLowerCase());
+        });
+        return banks;
+    },
+    mapBanks: (state, getters) => (name) => {
+        let banks = getters.filterBankByName(name);
+        return banks.map((o) => {
+            return {id: o.id, text: o.name}
+        })
+    },
+    banksLength(state) {
+        return state.banks.length
+    }
+};
+
+
+const module = {namespaced: true, state, mutations, actions, getters};
 
 export default module;
