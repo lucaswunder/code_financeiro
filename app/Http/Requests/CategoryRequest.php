@@ -2,9 +2,14 @@
 
 namespace CodeFin\Http\Requests;
 
+use CodeFin\Http\Controllers\CategoryRevenuesController;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * Class CategoryRequest
+ * @package CodeFin\Http\Requests
+ */
 class CategoryRequest extends FormRequest
 {
     /**
@@ -24,14 +29,25 @@ class CategoryRequest extends FormRequest
      */
     public function rules()
     {
-        $client = \Auth::guard('api')->user()->client;
-
+        $client = Auth::guard('api')->user()->client;
         return [
             'name' => 'required|max:255',
-            'parent_id' => Rule::exists('categories', 'id')
+            'parent_id' => Rule::exists($this->getTable(), 'id')
                 ->where(function ($query) use ($client) {
-                $query->where('client_id',$client->id);
-            })
+                    $query->where('client_id', $client->id);
+                })
         ];
+    }
+
+
+    /**
+     * @return string
+     */
+    protected function getTable()
+    {
+        $currentAction = \Route::currentRouteAction();
+        list($controller) = explode('@', $currentAction);
+        return str_is("$controller*", CategoryRevenuesController::class)
+            ? "category_revenues" : "category_expenses";
     }
 }

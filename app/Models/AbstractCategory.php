@@ -11,7 +11,7 @@ use Prettus\Repository\Traits\TransformableTrait;
  * Class Category
  * @package CodeFin\Models
  */
-class Category extends Model implements Transformable
+class AbstractCategory extends Model implements Transformable
 {
     use TransformableTrait;
     use BelongsToTenants;

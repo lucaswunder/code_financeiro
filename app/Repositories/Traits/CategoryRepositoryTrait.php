@@ -1,42 +1,36 @@
 <?php
 
-namespace CodeFin\Repositories;
+namespace CodeFin\Repositories\Traits;
 
-use CodeFin\Presenters\CategoryPresenter;
-use Prettus\Repository\Eloquent\BaseRepository;
-use Prettus\Repository\Criteria\RequestCriteria;
-use CodeFin\Repositories\Interfaces\CategoryRepository;
-use CodeFin\Models\Category;
-use CodeFin\Validators\CategoryValidator;
 
 /**
- * Class CategoryRepositoryEloquent
- * @package namespace CodeFin\Repositories;
+ * Trait CategoryRepositoryTrait
+ * @package CodeFin\Repositories
  */
-class CategoryRepositoryEloquent extends BaseRepository implements CategoryRepository
+Trait CategoryRepositoryTrait
 {
     public function create(array $attributes)
     {
-        Category::$enableTenant = false;
+        $model = $this->model();
+        $model::$enableTenant = false;
         if (isset($attributes['parent_id'])) {
             $skipPresenter = $this->skipPresenter;
             $this->skipPresenter(true);
             $parent = $this->find($attributes['parent_id']);
             $this->skipPresenter = $skipPresenter;
-            Category::$enableTenant = false;
             $child = $parent->children()->create($attributes);
-            Category::$enableTenant = true;
             $result = $this->parserResult($child);
         } else {
             $result = parent::create($attributes);
         }
-        Category::$enableTenant = true;
+        $model::$enableTenant = true;
         return $result;
     }
 
     public function update(array $attributes, $id)
     {
-        Category::$enableTenant = false;
+        $model = $this->model();
+        $model::$enableTenant = false;
         if (isset($attributes['parent_id'])) {
             $skipPresenter = $this->skipPresenter;
             $this->skipPresenter(true);
@@ -50,32 +44,7 @@ class CategoryRepositoryEloquent extends BaseRepository implements CategoryRepos
             $result = parent::update($attributes, $id);
             $result->makeRoot()->save();
         }
-        Category::$enableTenant = true;
+        $model::$enableTenant = true;
         return $result;
-    }
-
-
-    /**
-     * Specify Model class name
-     *
-     * @return string
-     */
-    public function model()
-    {
-        return Category::class;
-    }
-
-
-    /**
-     * Boot up the repository, pushing criteria
-     */
-    public function boot()
-    {
-        $this->pushCriteria(app(RequestCriteria::class));
-    }
-
-    public function presenter()
-    {
-        return CategoryPresenter::class;
     }
 }
