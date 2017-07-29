@@ -17,7 +17,7 @@
             </div>
         </div>
         <div class="card-panel z-depth-5">
-            <form name="form" method="get" @submit="submit()">
+            <form name="form" method="get" @submit.prevent="submit()">
                 <div class="row">
                     <div class="input-field col s12">
                         <label class="active">Nome</label>
