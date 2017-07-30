@@ -11,7 +11,7 @@
         <footer class="page-footer">
             <div class="footer-copyright">
                 <div class="container">
-                    © {{year}} <a class="grey-text text-lighten-4" href="http://">Lucas W.</a>
+                    © {{year}} <a class="grey-text text-lighten-4" href="http://">Lucas S. W.</a>
                 </div>
             </div>
         </footer>
