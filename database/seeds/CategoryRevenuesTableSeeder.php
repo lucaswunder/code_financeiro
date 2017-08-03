@@ -14,7 +14,7 @@ class CategoryRevenuesTableSeeder extends Seeder
     public function run()
     {
         $clients = $this->getClients();
-        factory(\CodeFin\Models\CategoryRevenue::class, 10)
+        factory(\CodeFin\Models\CategoryRevenue::class, 20)
             ->make()
             ->each(function ($category) use ($clients) {
                 $client = $clients->random();
@@ -23,7 +23,7 @@ class CategoryRevenuesTableSeeder extends Seeder
             });
         $categoriesRoot = $this->getCategoriesRoot();
         foreach ($categoriesRoot as $root) {
-            factory(\CodeFin\Models\CategoryRevenue::class, 2)
+            factory(\CodeFin\Models\CategoryRevenue::class, 5)
                 ->make()
                 ->each(function ($child) use ($root) {
                     $child->client_id = $root->client_id;

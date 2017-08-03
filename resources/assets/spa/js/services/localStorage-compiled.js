@@ -14,7 +14,7 @@ exports.default = {
         return window.localStorage[key] || defaultValue;
     },
     setObject: function setObject(key, value) {},
-    getObject: function getObjetct(key) {},
+    getObjetct: function getObjetct(key) {},
     remove: function remove(key) {
         window.localStorage.removeItem(key);
     }

@@ -1,6 +1,6 @@
 <template>
     <div class="spinner-fixed" v-if="loading">
-        <div class="spinner">
+        <div class="progress spinner">
             <div class="indeterminate"></div>
         </div>
     </div>
@@ -20,3 +20,15 @@
         }
     }
 </script>
+
+<style>
+.spinner{
+  margin: 0;
+}
+
+.spinner-fixed{
+  width: 100%;
+  position: fixed;
+  z-index: 998;
+}
+</style>

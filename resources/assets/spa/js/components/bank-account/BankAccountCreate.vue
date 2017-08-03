@@ -1,51 +1,52 @@
-<template src="./_form.html">
-</template>
-
+<template src="./_form.html"></template>
 <script>
-    import PageTitleComponent from '../PageTitle.vue';
-    import 'materialize-autocomplete';
     import store from '../../store/store';
+    import PageTitleComponent from '../../../../_default/components/PageTitle.vue';
+    import 'materialize-autocomplete';
 
-    export default {
+    export default{
         components: {
             'page-title': PageTitleComponent
         },
-        data() {
-            return {
-                title: 'Nova Conta',
+        data(){
+            return{
+                title: 'Nova conta bancária',
                 bankAccount: {
                     name: '',
                     agency: '',
                     account: '',
                     bank_id: '',
-                    'default': false,
+                    'default': false
                 },
                 bank: {
                     name: ''
                 }
-            };
-        },
-        computed: {
-            banks() {
-                return store.state.bank.banks;
             }
         },
-        created() {
+        computed: {
+            banks(){
+                return store.state.bank.banks;
+            },
+            banksLength(){
+                return store.getters['bank/banksLength'];
+            }
+        },
+        created(){
             this.getBanks();
         },
         methods: {
-            submit() {
-                store.dispatch('bankAccount/save',this.bankAccount).then(() => {
-                    Materialize.toast('Conta bancária criada com sucesso!', 4000);
+            submit(){
+                store.dispatch('bankAccount/save', this.bankAccount).then(() => {
+                    Materialize.toast('Conta bancária criada com sucesso!',5000);
                     this.$router.go({name: 'bank-account.list'});
-                })
-            },
-            getBanks() {
-                store.dispatch('bank/query').then((response) => {
-                    this.initAutoComplete();
                 });
             },
-            initAutoComplete() {
+            getBanks(){
+                store.dispatch('bank/query', this.bankAccount).then((response) => {
+                    this.initAutocomplete();
+                });
+            },
+            initAutocomplete(){
                 let self = this;
                 $(document).ready(() => {
                     $('#bank-id').materialize_autocomplete({
@@ -56,18 +57,17 @@
                         dropdown: {
                             el: '#bank-id-dropdown'
                         },
-                        getData(value, callback) {
-                            //Pega função declarada no bank  do vuex.
+                        getData(value, callback){
                             let mapBanks = store.getters['bank/mapBanks'];
                             let banks = mapBanks(value);
                             callback(value, banks);
                         },
-                        onSelect(item) {
+                        onSelect(item){
                             self.bankAccount.bank_id = item.id;
                         }
                     });
                 });
             }
         }
-    };
+    }
 </script>

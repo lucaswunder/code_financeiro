@@ -2,8 +2,9 @@
 
 namespace CodeFin\Http\Requests;
 
-use CodeFin\Http\Controllers\CategoryRevenuesController;
+use CodeFin\Http\Controllers\Api\CategoryRevenuesController;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 /**
@@ -48,6 +49,6 @@ class CategoryRequest extends FormRequest
         $currentAction = \Route::currentRouteAction();
         list($controller) = explode('@', $currentAction);
         return str_is("$controller*", CategoryRevenuesController::class)
-            ? "category_revenues" : "category_expenses";
+            ? "category_revenues" : "category_expanses";
     }
 }

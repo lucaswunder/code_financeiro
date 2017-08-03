@@ -31,7 +31,7 @@
 
                     <div class="row">
                         <div class="input-field col s12">
-                            <button type="submit" class="btn waves-effect">Login</button>
+                            <button type="submit" class="btn">Login</button>
                         </div>
                     </div>
                 </form>
@@ -40,10 +40,9 @@
     </div>
 </template>
 <script type="text/javascript">
-    import store from "../store/store";
-
-    export default {
-        data() {
+    import store from '../store/store';
+    export default{
+        data(){
             return {
                 user: {
                     email: '',
@@ -56,18 +55,21 @@
             }
         },
         methods: {
-            login() {
-                store.dispatch('auth/login', this.user).then(() => this.$router.go({name: 'dashboard'}))
-                    .catch((responseError) => {
-                        switch (responseError.status) {
-                            case 401:
-                                this.error.message = responseError.data.message;
-                                break;
-                            default:
-                                this.error.message = "Login failed.";
-                        }
-                        this.error.error = true;
-                    });
+            login(){
+                store.dispatch('login', this.user)
+                        .then(()=> {
+                            this.$router.go({name: 'dashboard'});
+                        })
+                        .catch((responseError) => {
+                            switch(responseError.status){
+                                case 401:
+                                    this.error.message = responseError.data.message;
+                                    break;
+                                default:
+                                    this.error.message = "Login failed.";
+                            }
+                            this.error.error = true;
+                        });
             }
         }
     }

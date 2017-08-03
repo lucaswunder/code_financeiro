@@ -4,7 +4,7 @@ import DashboardComponent from './components/Dashboard.vue';
 import BankAccountListComponent from './components/bank-account/BankAccountList.vue';
 import BankAccountCreateComponent from './components/bank-account/BankAccountCreate.vue';
 import BankAccountUpdateComponent from './components/bank-account/BankAccountUpdate.vue';
-import CategoryListComponent from './components/category/CategoryList.vue';
+import PlanAccountComponent from './components/category/PlanAccount.vue';
 
 export default{
     '/login': {
@@ -24,32 +24,25 @@ export default{
     },
     '/bank-accounts': {
         component: {template: "<router-view></router-view>"},
+        auth: true,
         subRoutes: {
             '/': {
                 name: 'bank-account.list',
-                component: BankAccountListComponent,
-                auth: true
+                component: BankAccountListComponent
             },
-            'create': {
+            '/create': {
                 name: 'bank-account.create',
-                component: BankAccountCreateComponent,
-                auth: true
+                component: BankAccountCreateComponent
             },
             '/:id/update': {
                 name: 'bank-account.update',
-                component: BankAccountUpdateComponent,
-                auth: true
+                component: BankAccountUpdateComponent
             }
         }
     },
-    '/categories':{
-        component:{template:"<router-view></router-view>"},
-        subRoutes:{
-            '/':{
-                name:'category.list',
-                component: CategoryListComponent,
-                auth: true
-            }
-        }
+    '/plan-account': {
+        name: 'plan-account.list',
+        component: PlanAccountComponent,
+        auth: true
     }
 }

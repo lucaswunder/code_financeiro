@@ -1,70 +1,59 @@
-import {BankAccount} from "../services/resources"
-import SearchOptions from '../../js/services/search-options';
+import {BankAccount} from '../services/resources';
+import SearchOptions from '../services/search-options';
 
 const state = {
     bankAccounts: [],
     bankAccountDelete: null,
-    bankAccountSave: {
-        name: 'minha conta',
-        agency: '',
-        account: '',
-        bank_id: '',
-        'default': false,
-    },
-    searchOptions: new SearchOptions('bank'),
+    searchOptions: new SearchOptions('bank')
 };
 
 const mutations = {
-    updateName(state, name) {
-        state.bankAccountSave.name = name;
+    set(state, bankAccounts){
+        state.bankAccounts = bankAccounts;
     },
-    set(state, bankAccounts) {
-        state.bankAccounts = bankAccounts
-    },
-    setDelete(state, bankAccount) {
+    setDelete(state, bankAccount){
         state.bankAccountDelete = bankAccount;
     },
-    'delete'(state) {
+    'delete'(state){
         state.bankAccounts.$remove(state.bankAccountDelete);
     },
-    setOrder(state, key) {
+    setOrder(state, key){
         state.searchOptions.order.key = key;
         let sort = state.searchOptions.order.sort;
         state.searchOptions.order.sort = sort == 'desc' ? 'asc' : 'desc';
     },
-    setPagination(state, pagination) {
+    setPagination(state, pagination){
         state.searchOptions.pagination = pagination;
     },
-    setCurrentPage(state, currentPage) {
+    setCurrentPage(state, currentPage){
         state.searchOptions.pagination.current_page = currentPage;
     },
-    setFilter(state, filter) {
+    setFilter(state, filter){
         state.searchOptions.search = filter;
     }
 };
 
 const actions = {
-    query(context) {
+    query(context){
         let searchOptions = context.state.searchOptions;
         return BankAccount.query(searchOptions.createOptions()).then((response) => {
             context.commit('set', response.data.data);
             context.commit('setPagination', response.data.meta.pagination);
         });
     },
-    queryWithSortBy(context, key) {
+    queryWithSortBy(context, key){
         context.commit('setOrder', key);
         context.dispatch('query');
     },
-    queryWithPagination(context, currentPage) {
+    queryWithPagination(context, currentPage){
         context.commit('setCurrentPage', currentPage);
         context.dispatch('query');
     },
-    queryWithFilter(context) {
+    queryWithFilter(context){
         context.dispatch('query');
     },
-    'delete'(context) {
+    'delete'(context){
         let id = context.state.bankAccountDelete.id;
-
         return BankAccount.delete({id: id}).then((response) => {
             context.commit('delete');
             context.commit('setDelete', null);
@@ -79,12 +68,15 @@ const actions = {
         });
     },
     save(context, bankAccount){
-        return BankAccount.save({}, bankAccount).then((response) => {
-           return response;
-        })
+        return BankAccount.save({},bankAccount).then((response) => {
+            return response;
+        });
     }
 };
 
-const module = {namespaced: true, state, mutations, actions};
+const module = {
+    namespaced: true,
+    state, mutations, actions
+};
 
 export default module;

@@ -12,19 +12,18 @@
 </template>
 <script type="text/javascript">
     import store from "../store/store";
-
-    export default {
-        ready() {
+    export default{
+        ready(){
             setTimeout(() => {
                 this.logout();
             }, 1000);
         },
         methods: {
-            logout() {
+            logout(){
                 let goToLogin = () => this.$router.go({name: 'auth.login'});
-                store.dispatch('auth/logout')
-                    .then(goToLogin)
-                    .catch(goToLogin);
+                store.dispatch('logout')
+                        .then(goToLogin)
+                        .catch(goToLogin);
             }
         }
     }

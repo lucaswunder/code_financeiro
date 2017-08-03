@@ -11,9 +11,6 @@
     </div>
 </template>
 <script>
-    import store from '../store/store';
-
-    export default {
-
+    export default{
     }
 </script>

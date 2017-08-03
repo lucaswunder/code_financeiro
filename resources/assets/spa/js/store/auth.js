@@ -10,31 +10,31 @@ const state = {
 };
 
 const mutations = {
-    setUser(state, user) {
+    setUser(state, user){
         state.user = user;
-        if (user !== null) {
+        if(user !== null){
             LocalStorage.setObject(USER, user);
-        } else {
+        }else{
             LocalStorage.remove(USER);
         }
     },
-    authenticated(state) {
+    authenticated(state){
         state.check = true;
     },
-    unauthenticated(state) {
+    unauthenticated(state){
         state.check = false;
     }
 };
 
 const actions = {
-    login(context, {email, password}) {
-        return JwtToken.accessToken(email, password).then((response) => {
+    login(context, {email, password}){
+        return JwtToken.accessToken(email, password).then((response)=> {
             context.commit('authenticated');
             context.dispatch('getUser');
             return response;
         });
     },
-    logout(context) {
+    logout(context){
         let afterLogout = (response) => {
             context.dispatch('clearAuth');
             return response;
@@ -43,11 +43,11 @@ const actions = {
             .then(afterLogout)
             .catch(afterLogout);
     },
-    clearAuth(context) {
+    clearAuth(context){
         context.commit('unauthenticated');
-        context.commit('setUser', null);
+        context.commit('setUser',null);
     },
-    getUser(context) {
+    getUser(context){
         return User.get().then((response) => {
             context.commit('setUser', response.data);
         });
@@ -55,8 +55,7 @@ const actions = {
 };
 
 const module = {
-    namespaced: true,
-    state, mutations, actions
+    state,mutations,actions
 };
 
 export default module;

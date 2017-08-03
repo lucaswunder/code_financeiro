@@ -19,7 +19,7 @@
             <div class="nav-wrapper">
                 <div class="row">
                     <div class="col s12">
-                        <a href="#" class="brand-logo">Financeiro</a>
+                        <a href="#" class="brand-logo">Code Financeiro</a>
                         <a href="#" data-activates="nav-mobile" class="button-collapse">
                             <i class="material-icons">menu</i>
                         </a>
@@ -80,7 +80,7 @@
                 if(menu.dropdownId !== undefined){
                     let dropdown = this.config.menusDropdown.find((element)=>{
                         return element.id == menu.dropdownId;
-                    });
+                    })
                     if(dropdown){
                         for(let o of dropdown.items){
                             if(o.active){

@@ -15,7 +15,7 @@
             <div class="nav-wrapper">
                 <div class="row">
                     <div class="col s12">
-                        <a href="#" v-link="{name:'dashboard'}" class="brand-logo">Financeiro</a>
+                        <a href="#" class="brand-logo">Financeiro</a>
                         <a href="#" data-activates="nav-mobile" class="button-collapse">
                             <i class="material-icons">menu</i>
                         </a>
@@ -50,20 +50,18 @@
         data(){
             return {
                 menus: [
-                    {name: 'Conta bancária', routeName: 'bank-account.list'},
-                    {name: 'Categoria', routeName: 'category.list'},
+                    {name: 'Conta Bancária', routeName: 'bank-account.list'},
+                    {name: 'Plano de contas', routeName: 'plan-account.list'},
                 ],
                 menusDropdown: []
             }
         },
         computed: {
-            name()
-            {
-                return store.state.auth.user.name;
-            }
+           name(){
+               return store.state.auth.user.name;
+           }
         },
-        ready()
-        {
+        ready(){
             $('.button-collapse').sideNav();
             $('.dropdown-button').dropdown();
         }
