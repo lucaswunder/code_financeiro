@@ -15,7 +15,7 @@
                     </div>
                     <div class="row">
                         <div class="input-field col s12">
-                            <select-material :options="cpOptions" :selected.sync="category.parent_id" ></select-material>
+                            <select-material :options="parentOptions" :selected.sync="category.parent_id" ></select-material>
                             <label class="active">Categoria Pai</label>
                         </div>
                     </div>
@@ -48,7 +48,7 @@
                 type: Object,
                 required: true
             },
-            cpOptions:{
+            parentOptions:{
                 type: Object,
                 required: true
             }

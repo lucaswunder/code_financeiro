@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <loading></loading>
+        <loading></loading>s
         <header v-if="showMenu">
             <menu></menu>
         </header>

@@ -154,7 +154,7 @@
         },
         computed: {
             //opções para o campo selec 2  de categorias pai
-            cpOptions() {
+            parentOptions() {
                 return {
                     data: this.categoriesFormatted,
                     templateResult(category) {
