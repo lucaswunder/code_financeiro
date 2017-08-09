@@ -14,6 +14,12 @@ use CodeFin\Repositories\Interfaces\BillPayRepository;
  */
 class BillPayRepositoryEloquent extends BaseRepository implements BillPayRepository
 {
+
+    protected $fieldSearchable = [
+        'name' => 'like',
+        'value' => 'like'
+    ];
+
     /**
      * Specify Model class name
      *
@@ -24,7 +30,6 @@ class BillPayRepositoryEloquent extends BaseRepository implements BillPayReposit
         return BillPay::class;
     }
 
-    
 
     /**
      * Boot up the repository, pushing criteria

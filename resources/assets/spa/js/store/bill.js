@@ -1,5 +1,4 @@
-import SearchOption from '../services/search-options';
-
+import SearchOptions from '../services/search-options';
 
 export default () => {
 
@@ -7,58 +6,58 @@ export default () => {
         bills: [],
         billDelete: null,
         resource: null,
-        searchOptions: new SearchOption()
+        searchOptions: new SearchOptions()
     };
 
     const mutations = {
-        set(state, bills) {
+        set(state, bills){
             state.bills = bills;
         },
-        update(state, {index, bill}) {
+        update(state, {index,bill}){
             state.bills.$set(index, bill);
         },
-        setDelete(state, bill) {
+        setDelete(state, bill){
             state.billDelete = bill;
         },
-        'delete'(state) {
-            state.bill.$remove(state.billDelete);
+        'delete'(state){
+            state.bills.$remove(state.billDelete);
         },
-        setOrder(state, key) {
+        setOrder(state, key){
             state.searchOptions.order.key = key;
             let sort = state.searchOptions.order.sort;
             state.searchOptions.order.sort = sort == 'desc' ? 'asc' : 'desc';
         },
-        setPagination(state, pagination) {
+        setPagination(state, pagination){
             state.searchOptions.pagination = pagination;
         },
-        setCurrentPage(state, currentPage) {
+        setCurrentPage(state, currentPage){
             state.searchOptions.pagination.current_page = currentPage;
         },
-        setFilter(state, filter) {
+        setFilter(state, filter){
             state.searchOptions.search = filter;
         }
     };
 
     const actions = {
-        query(context) {
+        query(context){
             let searchOptions = context.state.searchOptions;
             return context.state.resource.query(searchOptions.createOptions()).then((response) => {
                 context.commit('set', response.data.data);
                 context.commit('setPagination', response.data.meta.pagination);
             });
         },
-        queryWithSortBy(context, key) {
+        queryWithSortBy(context, key){
             context.commit('setOrder', key);
             context.dispatch('query');
         },
-        queryWithPagination(context, currentPage) {
+        queryWithPagination(context, currentPage){
             context.commit('setCurrentPage', currentPage);
             context.dispatch('query');
         },
-        queryWithFilter(context) {
+        queryWithFilter(context){
             context.dispatch('query');
         },
-        'delete'(context) {
+        'delete'(context){
             let id = context.state.billDelete.id;
             return context.state.resource.delete({id: id}).then((response) => {
                 context.commit('delete');
@@ -66,31 +65,32 @@ export default () => {
 
                 let bills = context.state.bills;
                 let pagination = context.state.searchOptions.pagination;
+
                 if (bills.length === 0 && pagination.current_page > 0) {
                     context.commit('setCurrentPage', pagination.current_page--);
                 }
                 return response;
             });
         },
-        save(context, bill) {
+        save(context, bill){
             return context.state.resource.save({}, bill).then((response) => {
                 context.dispatch('query');
                 return response;
             });
         },
-        edit(context, {index, bill}) {
+        edit(context, {index,bill}){
             return context.state.resource.update({id: bill.id}, bill).then((response) => {
-                context.commit('update', {index, bill});
+                context.commit('update',{index, bill});
                 return response;
             });
         }
     };
 
     const getters = {
-        billByIndex: (state) => (index) =>{
+        billByIndex: (state) => (index) => {
             return state.bills[index];
         }
-    };
+    }
 
     const module = {
         namespaced: true,
@@ -99,6 +99,5 @@ export default () => {
         actions,
         getters
     };
-
     return module;
-}
+};

@@ -1,10 +1,9 @@
 <template src="../_form.html"></template>
 <script>
-    import billPayMixin from '../../../mixins/bill-mixin';
-
-    export default {
-        mixins: [billPayMixin],
-        methods:{
+    import billMixin from '../../../mixins/bill-mixin';
+    export default{
+        mixins: [billMixin],
+        methods: {
             namespace(){
                 return 'billPay';
             },

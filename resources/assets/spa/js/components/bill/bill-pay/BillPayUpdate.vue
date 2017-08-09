@@ -1,10 +1,10 @@
 <template src="../_form.html"></template>
 <script>
-    import billPayMixin from '../../../mixins/bill-mixin';
+    import billMixin from '../../../mixins/bill-mixin';
     import store from '../../../store/store';
 
     export default {
-        mixins: [billPayMixin],
+        mixins: [billMixin],
         created() {
             let self = this;
             this.modalOptions.options = {};
@@ -13,14 +13,14 @@
             };
             this.modalOptions.options.complete = () => {
                 self.resetScope();
-            }
+            };
         },
         methods: {
             namespace() {
                 return 'billPay';
             },
             title() {
-                return 'Editar Pagamento';
+                return 'Editar pagamento';
             },
             getBill() {
                 let bill = store.getters[`${this.namespace()}/billByIndex`](this.index);

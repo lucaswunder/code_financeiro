@@ -6,13 +6,13 @@ const state = {
 };
 
 const mutations = {
-    set(state, banks){
+    set(state, banks) {
         state.banks = banks;
     }
 };
 
 const actions = {
-    query(context){
+    query(context) {
         return Bank.query().then((response) => {
             context.commit('set', response.data.data);
         });
@@ -22,17 +22,17 @@ const actions = {
 const getters = {
     filterBankByName: (state) => (name) => {
         let banks = _.filter(state.banks, (o) => {
-            return _.includes(o.name.toLowerCase(), name.toLowerCase());
+            return _.contains(o.name.toLowerCase(), name.toLowerCase());
         });
         return banks;
     },
     mapBanks: (state, getters) => (name) => {
-            let banks = getters.filterBankByName(name);
-            return banks.map((o) => {
-                return {id: o.id, text: o.name};
-            });
+        let banks = getters.filterBankByName(name);
+        return banks.map((o) => {
+            return {id: o.id, text: o.name};
+        });
     },
-    banksLength(state){
+    banksLength(state) {
         return state.banks.length;
     }
 };

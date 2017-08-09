@@ -1,6 +1,6 @@
 <template>
     <div class="card-panel indigo lighten-1">
-        <span class="white-text">
+        <span class="white-text center">
             <slot></slot>
         </span>
     </div>

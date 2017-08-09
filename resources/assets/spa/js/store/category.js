@@ -144,6 +144,8 @@ export default () => {
         'new'(context, category){
             return context.state.resource.save(category).then((response) => {
                 context.commit('setCategory', response.data.data);
+                let parent = findParent(state.category.parent_id,state.categories);
+                context.commit('setParent',parent);
                 context.commit('add');
                 return response;
             });

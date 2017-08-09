@@ -6,7 +6,6 @@ use CodeFin\Events\BankStoredEvent;
 use CodeFin\Models\Bank;
 use CodeFin\Presenters\BankPresenter;
 use CodeFin\Repositories\Interfaces\BankRepository;
-use CodeFin\Validators\BankValidator;
 use Illuminate\Http\UploadedFile;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Eloquent\BaseRepository;

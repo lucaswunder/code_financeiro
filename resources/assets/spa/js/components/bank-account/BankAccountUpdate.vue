@@ -75,7 +75,7 @@
             },
             filterBankByName(name){
                 let banks = _.filter(this.banks, (o) => {
-                    return _.includes(o.name.toLowerCase(), name.toLowerCase());
+                    return _.contains(o.name.toLowerCase(), name.toLowerCase());
                 });
                 return banks;
             }

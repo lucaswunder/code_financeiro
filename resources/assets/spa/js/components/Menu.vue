@@ -46,22 +46,31 @@
 
 <script type="text/javascript">
     import store from '../store/store';
+
     export default {
-        data(){
+        data() {
             return {
                 menus: [
                     {name: 'Conta Bancária', routeName: 'bank-account.list'},
                     {name: 'Plano de contas', routeName: 'plan-account.list'},
+                    {name: 'Contas', dropdownId: 'bills-dropdown'},
                 ],
-                menusDropdown: []
+                menusDropdown: [
+                    {
+                        id: 'bills-dropdown',
+                        items: [
+                            {name: "A pagar", routeName: 'bill-pay.list'},
+                        ]
+                    },
+                ]
             }
         },
         computed: {
-           name(){
-               return store.state.auth.user.name;
-           }
+            name() {
+                return store.state.auth.user.name;
+            }
         },
-        ready(){
+        ready() {
             $('.button-collapse').sideNav();
             $('.dropdown-button').dropdown();
         }

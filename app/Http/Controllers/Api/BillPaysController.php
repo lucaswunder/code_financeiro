@@ -2,8 +2,7 @@
 
 namespace CodeFin\Http\Controllers\Api;
 
-use Prettus\Validator\Contracts\ValidatorInterface;
-use Prettus\Validator\Exceptions\ValidatorException;
+use CodeFin\Http\Controllers\Controller;
 use CodeFin\Http\Requests\BillPayCreateRequest;
 use CodeFin\Http\Requests\BillPayUpdateRequest;
 use CodeFin\Repositories\Interfaces\BillPayRepository;
@@ -31,7 +30,7 @@ class BillPaysController extends Controller
      */
     public function index()
     {
-        $billPays = $this->repository->paginate(3);
+        $billPays = $this->repository->paginate(15);
         return $billPays;
     }
 
@@ -88,7 +87,7 @@ class BillPaysController extends Controller
     public
     function destroy($id)
     {
-        $deleted = $this->repository->delete($id);
+        $this->repository->delete($id);
         return response()->json([], 204);
     }
 }
