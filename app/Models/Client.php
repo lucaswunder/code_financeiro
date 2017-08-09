@@ -18,4 +18,12 @@ class Client extends Model implements Transformable
     public function users(){
         return $this->hasMany(User::class);
     }
+
+    public function bankAccounts(){
+        return $this->hasMany(BankAccount::class);
+    }
+
+    public function categoryExpanses(){
+        return $this->hasMany(CategoryExpanse::class);
+    }
 }

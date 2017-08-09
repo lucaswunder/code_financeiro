@@ -16,10 +16,14 @@ class BillPaysTableSeeder extends Seeder
 
         factory(\CodeFin\Models\BillPay::class, 200)
             ->make()
-            ->each(function($billpay) use ($clients){
+            ->each(function($billPay) use ($clients){
                $client = $clients->random();
-               $billpay->client_id = $client->id;
-               $billpay->save();
+               $bankAccount = $client->bankAccounts->random();
+               $category = $client->categoryExpanses->random();
+               $billPay->client_id = $client->id;
+               $billPay->bank_account_id = $bankAccount->id;
+               $billPay->category_id = $category->id;
+               $billPay->save();
             });
     }
 }
