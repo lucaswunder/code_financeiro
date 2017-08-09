@@ -1,58 +1,68 @@
 import {BankAccount} from '../services/resources';
 import SearchOptions from '../services/search-options';
+import _ from 'lodash';
 
 const state = {
     bankAccounts: [],
+    lists: [],
     bankAccountDelete: null,
     searchOptions: new SearchOptions('bank')
 };
 
 const mutations = {
-    set(state, bankAccounts){
+    set(state, bankAccounts) {
         state.bankAccounts = bankAccounts;
     },
-    setDelete(state, bankAccount){
+    setLists(state, lists) {
+        state.lists = lists;
+    },
+    setDelete(state, bankAccount) {
         state.bankAccountDelete = bankAccount;
     },
-    'delete'(state){
+    'delete'(state) {
         state.bankAccounts.$remove(state.bankAccountDelete);
     },
-    setOrder(state, key){
+    setOrder(state, key) {
         state.searchOptions.order.key = key;
         let sort = state.searchOptions.order.sort;
         state.searchOptions.order.sort = sort == 'desc' ? 'asc' : 'desc';
     },
-    setPagination(state, pagination){
+    setPagination(state, pagination) {
         state.searchOptions.pagination = pagination;
     },
-    setCurrentPage(state, currentPage){
+    setCurrentPage(state, currentPage) {
         state.searchOptions.pagination.current_page = currentPage;
     },
-    setFilter(state, filter){
+    setFilter(state, filter) {
         state.searchOptions.search = filter;
     }
 };
 
 const actions = {
-    query(context){
+    lists(context) {
+        return BankAccount.lists().then(response => {
+            context.commit('setLists', response.data);
+        });
+    },
+    query(context) {
         let searchOptions = context.state.searchOptions;
         return BankAccount.query(searchOptions.createOptions()).then((response) => {
             context.commit('set', response.data.data);
             context.commit('setPagination', response.data.meta.pagination);
         });
     },
-    queryWithSortBy(context, key){
+    queryWithSortBy(context, key) {
         context.commit('setOrder', key);
         context.dispatch('query');
     },
-    queryWithPagination(context, currentPage){
+    queryWithPagination(context, currentPage) {
         context.commit('setCurrentPage', currentPage);
         context.dispatch('query');
     },
-    queryWithFilter(context){
+    queryWithFilter(context) {
         context.dispatch('query');
     },
-    'delete'(context){
+    'delete'(context) {
         let id = context.state.bankAccountDelete.id;
         return BankAccount.delete({id: id}).then((response) => {
             context.commit('delete');
@@ -67,16 +77,31 @@ const actions = {
             return response;
         });
     },
-    save(context, bankAccount){
-        return BankAccount.save({},bankAccount).then((response) => {
+    save(context, bankAccount) {
+        return BankAccount.save({}, bankAccount).then((response) => {
             return response;
+        });
+    }
+};
+
+const getters = {
+    filterBankAccountByName: (state) => (name) => {
+        let bankAccounts = _.filter(state.lists, (o) => {
+            return _.contains(o.name.toLowerCase(), name.toLowerCase());
+        });
+        return bankAccounts;
+    },
+    mapBankAccounts: (state, getters) => (name) => {
+        let bankAccounts = getters.filterBankAccountByName(name);
+        return bankAccounts.map((o) => {
+            return {id: o.id, text: `${o.name} - ${o.account}`};
         });
     }
 };
 
 const module = {
     namespaced: true,
-    state, mutations, actions
+    state, mutations, actions, getters
 };
 
 export default module;
