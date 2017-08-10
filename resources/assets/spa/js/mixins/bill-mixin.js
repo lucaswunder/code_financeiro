@@ -26,7 +26,7 @@ export default {
                 id: 0,
                 name: '',
                 date_due: '',
-                value: '',
+                value: 0,
                 done: false,
                 bank_account_id: 0,
                 category_id: 0
@@ -112,7 +112,7 @@ export default {
                 id: 0,
                 name: '',
                 date_due: '',
-                value: '',
+                value: 0,
                 done: false,
                 bank_account_id: 0,
                 category_id: 0
