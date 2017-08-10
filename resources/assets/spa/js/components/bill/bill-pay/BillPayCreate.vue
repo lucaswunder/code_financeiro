@@ -1,13 +1,17 @@
 <template src="../_form.html"></template>
 <script>
     import billMixin from '../../../mixins/bill-mixin';
-    export default{
+
+    export default {
         mixins: [billMixin],
         methods: {
-            namespace(){
+            namespace() {
                 return 'billPay';
             },
-            title(){
+            categoryNamespace() {
+                return 'categoryExpense';
+            },
+            title() {
                 return 'Novo pagamento';
             }
         }

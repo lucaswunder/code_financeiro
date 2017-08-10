@@ -20,16 +20,7 @@ export default{
         }
     },
     computed: {
-        categories(){
-            return store.state[this.namespace()].categories;
-        },
-        categoriesFormatted(){
-            return store.getters[`${this.namespace()}/categoriesFormatted`];
-        },
-        categoryDelete(){
-            return store.state[this.namespace()].category;
-        },
-        parentOptions(){
+        parentOptions(){ //CP options
             return {
                 data: this.categoriesFormatted,
                 templateResult(category){
@@ -41,6 +32,15 @@ export default{
                     return m;
                 }
             }
+        },
+        categories(){
+            return store.state[this.namespace()].categories;
+        },
+        categoriesFormatted(){
+            return store.getters[`${this.namespace()}/categoriesFormatted`];
+        },
+        categoryDelete(){
+            return store.state[this.namespace()].category;
         },
         modalOptionsSave(){
             return {id: `modal-category-save-${this._uid}`};

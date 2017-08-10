@@ -1,11 +1,13 @@
 import ModalComponent from '../../../_default/components/Modal.vue';
+import SelectMaterialComponent from '../../../_default/components/SelectMaterial.vue';
 import PageTitleComponent from '../../../_default/components/PageTitle.vue';
 import store from '../store/store';
 
 export default {
     components: {
         'page-title': PageTitleComponent,
-        'modal': ModalComponent
+        'modal': ModalComponent,
+        'select-material': SelectMaterialComponent
     },
     props: {
         index: {
@@ -26,18 +28,35 @@ export default {
                 date_due: '',
                 value: '',
                 done: false,
-                bank_account_id: 0
+                bank_account_id: 0,
+                category_id: 0
             }
         }
     },
-    computed:{
-        bankAccounts(){
+    computed: {
+        parentOptions() { //CP options
+            return {
+                data: this.categoriesFormatted,
+                templateResult(category) {
+                    let margin = '&nbsp'.repeat(category.level * 6)
+                    let text = category.hasChildren ? `<strong>${category.text}</strong>` : category.text;
+                    return `${margin}${text}`;
+                },
+                escapeMarkup(m) {
+                    return m;
+                }
+            }
+        },
+        bankAccounts() {
             return store.state.bankAccount.lists;
+        },
+        categoriesFormatted() {
+            return store.getters[`${this.categoryNamespace()}/categoriesFormatted`];
         }
     },
-    watch:{
-        bankAccounts(bankAccounts){
-            if(bankAccounts.length > 0){
+    watch: {
+        bankAccounts(bankAccounts) {
+            if (bankAccounts.length > 0) {
                 this.initAutocomplete();
             }
         }
@@ -95,7 +114,8 @@ export default {
                 date_due: '',
                 value: '',
                 done: false,
-                bank_account_id: 0
+                bank_account_id: 0,
+                category_id: 0
             }
         }
     }
